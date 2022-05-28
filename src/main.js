@@ -10,14 +10,14 @@ const mapActions = {
     alias: 'c',
     description: 'create a project',
     examples: [
-      'cp_cli create <project-name>'
+      'cpma-cli create <project-name>'
     ]
   },
   config: {
     alias: 'conf',
     description: 'create a project',
     examples: [
-      'cp_cli config xx'
+      'cpma-cli config xx'
     ]
   },
   '*': {
@@ -35,7 +35,7 @@ Reflect.ownKeys(mapActions).forEach(action => {
         console.log(mapActions[action].description)
       } else {
         // console.log(action)
-        // cp_cli create xxx  [node,cp_cli,create,...]
+        // cpma-cli create xxx  [node,cpma-cli,create,...]
         require(path.resolve(__dirname,action))(...process.argv.slice(3))
       }
     })
