@@ -3,5 +3,5 @@
 ```
 npm i cpma-cli -g
 cd <your-project>
-cpma-cli cli create ./src/pages/<your-page-name>
+cpma-cli create ./src/pages/<your-page-name>
 
