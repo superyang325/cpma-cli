@@ -78,7 +78,7 @@ module.exports = async (projectName) => {
   // 处理模板
   // 将模板放到临时文件里备后期使用
   console.log(downLoadDirectory, '临时文件夹')
-  const dest = Loading(DownloadTemplate, 'download template page...')(repo, tag)
+  const dest = await Loading(DownloadTemplate, 'download template page...')(repo, tag)
   console.log(dest, 'dest')
 
 
