@@ -10,6 +10,7 @@ downloadGitRepo = promisify(downloadGitRepo)
 let ncp = require('ncp')
 ncp = promisify(ncp)
 const metalsmith = require('metalsmith') // 遍历文件夹 找是否需要渲染
+const { debug } = require('console')
 let { render } = require('consolidate').ejs
 render = promisify(render)
 
@@ -53,7 +54,7 @@ module.exports = async (projectName) => {
   let repos = await Loading(getReposList, 'fetching template page...')()
   repos = repos.map(item => item.name)
   if (!repos.length) {
-    console.log('no repos')
+    console.log('no repos!')
     return
   }
   const { repo } = await inquirer.prompt({
@@ -65,7 +66,7 @@ module.exports = async (projectName) => {
   let tags = await Loading(getTagList, 'fetching tags...')(repo)
   tags = tags.map(item => item.name)
   if (!tags.length) {
-    console.log('no tags')
+    console.log('no tags!')
     return
   }
   const { tag } = await inquirer.prompt({
@@ -77,16 +78,23 @@ module.exports = async (projectName) => {
   console.log(repo, tag)
   // 处理模板
   // 将模板放到临时文件里备后期使用
-  console.log(downLoadDirectory, '临时文件夹')
   const dest = await Loading(DownloadTemplate, 'download template page...')(repo, tag)
-  console.log(dest, 'dest')
 
 
   // 根据模板中是否有ask文件判断 模板是否需要渲染 metalsmith 遍历模板文件并编译
   // .template/xxx 如果有ask文件
   if (!fs.existsSync(path.join(dest, 'ask.js'))) {
     //  path.resolve() 代表当前执行命令的目录
-    await ncp(dest, path.resolve(projectName))
+    try{
+      await ncp(dest, path.resolve(projectName),(err)=>{
+        if (err) {
+          return console.error(err);
+        }
+        console.log('done!');
+      })
+    }catch(e){
+      console.log(e)
+    }
 
   } else {
     await new Promise((resolve, reject) => {
